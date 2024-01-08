@@ -1,0 +1,55 @@
+					USER MANUAL
+To open in a batchfile make sure to type ./myshell <batchfile.txt> this will output all commands inside the file
+To use cd, type cd <directory> the directory must exist 
+To use clr simply type clr, bringing you back to the top of the page
+to use dir, type dir <directory> this will list components of current directory or directory listed
+to use environ simply type environ, this displays all environment variables 
+to print out your own message with echo, type echo <message> message will then be printed on new line
+to use help, type help, this will print this amazing user manual
+to use pause, type pause, this enters a loop in which you must click \n(enter) to exit 
+quit is my exit command, type quit bro
+the path of the shell is printed once it is activated, as well as shell environment is set 
+
+File Redirection is handled with two functions, redirectCheck and redirect
+redirectCheck will check the commandline input to see if there is a <, >, >> symbol within it
+after that it returns a 1 if there is a symbol and then calls redirect with arguments set 
+
+redirect will take the inputs from both sides of the operator, handling the writing, duping, and closing file depending on operator
+these redirections were handled by opening files in a state, duping them, closing them as well as making sure they were NULL
+
+
+background processing, placing & after a command will allow you to keep typing commands while original process is running
+
+
+the cd command is implemented with getcwd, which returns a string containing a pathname
+
+the clr command will print the string needed to return to top of screen, moving everything above you and getting a clear screen 
+
+the dir command uses a directory pointer and struct to read through the struct 
+
+environ command makes an extern char **environ variable and prints everything inside it with a for loop
+
+echo command uses a for loop to wait till i is NULL to print text written before NULL was reached
+
+help command opens a file in read mode and prints from it, max size can be 1024 of file array
+
+pause command is making a array that can hold input up till 1024 until the enter key is pressed, comparing each key pressed after calling help with strcmp
+
+Creating the shell path was done using getcwd and gethostname, each getting a value and length, it prints it as a string
+
+
+For the main C file, I used different functions to parse the entire command and then do a task
+char *readInput() was created to get whatever input the user types, not parsing it just yet, this is done with fgets
+
+runBuiltIn(char * argv[1024]) has an argumentv value of 1024 for initializing 
+it will compare input from the user with already created commands and using strcmp, will check the value, then return the equivalent of the command name along with its function, there were 7 built in commands
+
+inputParse(char *line, char argv[1024]) is how I tokenized my input, to compare when executing commands this tokenizer handles spaces, tabs and new lines
+
+forkProgram was created for the programs that are not built in, such at cat or ls, we fork them and then use execvp to compare if the command exist, displaying an error message
+
+parseEntire is what I used to go through the tokenized input and then do my checks to see which kind of command it is, if it has a background symbol, it returns a check for background, if it has < > >> then we run the seperate function for checking redirection, which then redirects the arguments, else it will do a final check for built in commands and call forkProgram for any other commands
+
+
+The main function will make sure to set an environment variable, then check the number of arguments in the launch, launching a file to batchfile.txt and outputting all test commands if two argc are there and otherwise opening regularly as the shell
+
